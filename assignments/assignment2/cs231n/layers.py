@@ -588,6 +588,8 @@ def conv_forward_naive(x, w, b, conv_param):
     N, C, H, W = x.shape
     F, C, HH, WW = w.shape
     x_pad = np.pad(x, ((0,0),(0,0),(pad,pad),(pad,pad)), 'constant')
+    # print(x)
+    # print(x_pad)
     H_pad = x_pad.shape[2]
     W_pad = x_pad.shape[3]
 
@@ -604,7 +606,7 @@ def conv_forward_naive(x, w, b, conv_param):
     x_col = np.zeros((C*HH*WW, H_out*W_out))
     for index in range(N):
         col = 0
-        for i in range(0, H_pad-HH+1, stride):
+        for i in range(0, H_pad-HH+1, stride): ## stride만큼 이동
             for j in range(0, W_pad-WW+1, stride):
                 x_col[:, col] = x_pad[index, :, i:i+HH, j:j+WW].reshape(C*HH*WW)
                 col += 1
