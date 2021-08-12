@@ -1,3 +1,4 @@
 # exclude json file
 *.json
 assignments/assignment3/cs231n/datasets/coco_captioning/
+assignments/assignment3/cs231n/datasets/MNIST_data/
