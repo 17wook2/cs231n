@@ -34,7 +34,10 @@ def compute_saliency_maps(X, y, model):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    scores = model(X)
+    loss = torch.nn.functional.cross_entropy(scores,y)
+    loss.backward()
+    saliency = torch.max(torch.abs(X.grad), 1)[0]
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -76,7 +79,16 @@ def make_fooling_image(X, target_y, model):
     ##############################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    for i in range(100):
+        scores = model(X_fooling)
+        idx = torch.max(scores, dim=1)[1]
+        if target_y == idx:
+            break
+        target_score = scores[0, target_y]
+        target_score.backward()
+        g = X_fooling.grad
+        X_fooling.data += learning_rate * g / g.norm()
+        X_fooling.grad.zero_()
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ##############################################################################
@@ -94,7 +106,11 @@ def class_visualization_update_step(img, model, target_y, l2_reg, learning_rate)
     ########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    scores = model(img)
+    func = scores[0, target_y] - l2_reg * torch.sum(img * img)
+    func.backward()
+    img.data += learning_rate * img.grad / img.grad.norm()
+    img.grad.zero_()
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ########################################################################
