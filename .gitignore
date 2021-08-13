@@ -2,3 +2,5 @@
 *.json
 assignments/assignment3/cs231n/datasets/coco_captioning/
 assignments/assignment3/cs231n/datasets/MNIST_data/
+assignments/assignment3/data/
+assignments/assignment3/pretrained_model/
